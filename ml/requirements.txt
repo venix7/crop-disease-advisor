@@ -1,0 +1,6 @@
+torch
+torchvision
+datasets==3.6.0
+huggingface_hub<1.0
+scikit-learn
+pillow

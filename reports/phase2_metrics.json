@@ -1,0 +1,84 @@
+{
+  "dataset": {
+    "id": "mohanty/PlantVillage",
+    "configuration": "color"
+  },
+  "architecture": "resnet18",
+  "split_method": "GroupShuffleSplit by leaf_id after combining source splits",
+  "class_ids": [
+    "Tomato___healthy",
+    "Tomato___Early_blight",
+    "Tomato___Late_blight",
+    "Tomato___Bacterial_spot"
+  ],
+  "train_images": 4686,
+  "validation_images": 927,
+  "test_images": 1014,
+  "best_validation_macro_f1": 0.9153869362339139,
+  "test_macro_f1": 0.9350296730087672,
+  "classification_report": {
+    "Tomato___healthy": {
+      "precision": 0.963265306122449,
+      "recall": 1.0,
+      "f1-score": 0.9812889812889813,
+      "support": 236.0
+    },
+    "Tomato___Early_blight": {
+      "precision": 0.8321167883211679,
+      "recall": 0.8571428571428571,
+      "f1-score": 0.8444444444444444,
+      "support": 133.0
+    },
+    "Tomato___Late_blight": {
+      "precision": 0.9806201550387597,
+      "recall": 0.900355871886121,
+      "f1-score": 0.9387755102040817,
+      "support": 281.0
+    },
+    "Tomato___Bacterial_spot": {
+      "precision": 0.9625668449197861,
+      "recall": 0.989010989010989,
+      "f1-score": 0.975609756097561,
+      "support": 364.0
+    },
+    "accuracy": 0.9497041420118343,
+    "macro avg": {
+      "precision": 0.9346422736005406,
+      "recall": 0.9366274295099918,
+      "f1-score": 0.9350296730087672,
+      "support": 1014.0
+    },
+    "weighted avg": {
+      "precision": 0.9506220317636163,
+      "recall": 0.9497041420118343,
+      "f1-score": 0.9495199016589446,
+      "support": 1014.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      236,
+      0,
+      0,
+      0
+    ],
+    [
+      4,
+      114,
+      3,
+      12
+    ],
+    [
+      4,
+      22,
+      253,
+      2
+    ],
+    [
+      1,
+      1,
+      2,
+      360
+    ]
+  ]
+}
