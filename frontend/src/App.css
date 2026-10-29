@@ -1,0 +1,10 @@
+#root {
+  max-width: 720px;
+  margin: 4rem auto;
+  padding: 0 1.5rem;
+  font-family: system-ui, sans-serif;
+}
+
+li {
+  margin: 0.5rem 0;
+}

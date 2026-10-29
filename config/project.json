@@ -1,0 +1,35 @@
+{
+  "crop": "tomato",
+  "dataset": {
+    "id": "mohanty/PlantVillage",
+    "configuration": "color"
+  },
+  "classes": [
+    { "id": "Tomato___healthy", "name": "Healthy tomato leaf" },
+    { "id": "Tomato___Early_blight", "name": "Early blight" },
+    { "id": "Tomato___Late_blight", "name": "Late blight" },
+    { "id": "Tomato___Bacterial_spot", "name": "Bacterial spot" }
+  ],
+  "sources": [
+    {
+      "class_id": "Tomato___healthy",
+      "title": "Growing tomatoes in home gardens",
+      "url": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-tomatoes"
+    },
+    {
+      "class_id": "Tomato___Early_blight",
+      "title": "Early blight in tomato and potato",
+      "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/early-blight-in-tomato-and-potato"
+    },
+    {
+      "class_id": "Tomato___Late_blight",
+      "title": "Late blight of tomato and potato",
+      "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/late-blight"
+    },
+    {
+      "class_id": "Tomato___Bacterial_spot",
+      "title": "Bacterial spot of tomato and pepper",
+      "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/bacterial-spot-of-tomato-and-pepper"
+    }
+  ]
+}
