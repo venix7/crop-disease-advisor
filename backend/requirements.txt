@@ -5,3 +5,9 @@ python-dotenv
 torch
 torchvision
 pillow
+pgvector
+sentence-transformers
+langchain-groq
+langchain-text-splitters
+requests
+beautifulsoup4

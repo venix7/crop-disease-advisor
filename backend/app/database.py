@@ -3,7 +3,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from dotenv import load_dotenv
-from sqlalchemy import DateTime, Float, String, create_engine
+from pgvector.sqlalchemy import VECTOR
+from sqlalchemy import DateTime, Float, Integer, String, Text, create_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
 
@@ -14,7 +15,6 @@ database_url = os.getenv("DATABASE_URL")
 if not database_url:
     raise RuntimeError("Set DATABASE_URL in the project-root .env file")
 
-# Use the installed psycopg 3 driver.
 if database_url.startswith("postgres://"):
     database_url = database_url.replace(
         "postgres://", "postgresql+psycopg://", 1
@@ -47,6 +47,18 @@ class Diagnosis(Base):
         default=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
+
+
+class DocumentChunk(Base):
+    __tablename__ = "document_chunks"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    class_id: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
+    source_title: Mapped[str] = mapped_column(String(255), nullable=False)
+    source_url: Mapped[str] = mapped_column(Text, nullable=False)
+    chunk_index: Mapped[int] = mapped_column(Integer, nullable=False)
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    embedding: Mapped[list[float]] = mapped_column(VECTOR(384), nullable=False)
 
 
 def get_db():

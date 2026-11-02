@@ -6,12 +6,13 @@ from uuid import uuid4
 
 from fastapi import Depends, FastAPI, File, HTTPException, Request, UploadFile
 from PIL import Image, ImageOps, UnidentifiedImageError
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.orm import Session
 
 from .classifier import LeafClassifier
 from .database import Base, Diagnosis, engine, get_db
-from .schemas import DiagnosisResponse
+from .rag import RagService
+from .schemas import DiagnosisResponse, GuidanceResponse, QuestionRequest
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -27,8 +28,14 @@ project_config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+    with engine.begin() as connection:
+        connection.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+
     Base.metadata.create_all(bind=engine)
     app.state.classifier = LeafClassifier()
+    app.state.rag = RagService()
+
     yield
 
 
@@ -153,3 +160,48 @@ def get_diagnosis(
             detail="Diagnosis not found.",
         )
     return diagnosis
+
+
+def require_diagnosis(db: Session, diagnosis_id: str) -> Diagnosis:
+    diagnosis = db.get(Diagnosis, diagnosis_id)
+    if diagnosis is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Diagnosis not found.",
+        )
+    return diagnosis
+
+
+@app.post(
+    "/api/diagnoses/{diagnosis_id}/guidance",
+    response_model=GuidanceResponse,
+)
+def get_guidance(
+    diagnosis_id: str,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    diagnosis = require_diagnosis(db, diagnosis_id)
+    question = (
+        "What are the identifying symptoms and general management "
+        "steps described in the guidance?"
+    )
+    return request.app.state.rag.answer(db, diagnosis, question)
+
+
+@app.post(
+    "/api/diagnoses/{diagnosis_id}/questions",
+    response_model=GuidanceResponse,
+)
+def ask_question(
+    diagnosis_id: str,
+    payload: QuestionRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    diagnosis = require_diagnosis(db, diagnosis_id)
+    return request.app.state.rag.answer(
+        db,
+        diagnosis,
+        payload.question,
+    )
